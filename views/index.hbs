@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <br>
+            <h3 class="text-center">{{title}}</h3>
+            <br>
+            <br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-5 col-centered">
+            <form class="form-horizontal" id="login-form" method="POST" action="/login">
+                <legend>Log In</legend>
+                <br>
+                <div class="form-group row">
+                    <label for="userName" class="col-xs-2 control-label">Username</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" name="userName" id="userName" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="password" class="col-xs-2 control-label">Password</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" name="password" id="password" />
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-success"> Log In </button>
+            </form>
+        </div>  <!-- /.col -->
+    </div>  <!-- /.row -->
+</div> <!-- /.container -->

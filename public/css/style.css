@@ -1,0 +1,8 @@
+body {
+  padding-top: 50px;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
