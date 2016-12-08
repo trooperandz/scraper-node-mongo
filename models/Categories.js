@@ -4,7 +4,7 @@ const mongoose = require('mongoose'),
       Schema = mongoose.Schema;
 
 const CategoriesSchema = new Schema({
-    title: {
+    category: {
         type: String,
         trim: true,
         required: 'String is required',
@@ -16,6 +16,6 @@ const CategoriesSchema = new Schema({
     }
 });
 
-const Categories = mongoose.model('Categories', UsersSchema);
+const Categories = mongoose.model('Categories', CategoriesSchema);
 
 module.exports = Categories;
