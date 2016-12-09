@@ -1,6 +1,8 @@
 'use strict';
 
-const News = require('../models/News'),
+const mongoose = require('mongoose'),
+      News = require('../models/News'),
+      Posts = require('../models/Posts'),
       services = require('../services'),
       request = require('request'),
       cheerio = require('cheerio'),
@@ -101,8 +103,58 @@ module.exports = {
                 imgUrl: doc.imgUrl,
                 description: doc.description,
                 articleLink: doc.link,
+                newsId: doc._id,
             });
         });
+    },
+
+    postComment: (req, res) => {
+        let post = req.body.post;
+        let _userRef = req.session.userId;
+        let _articleRef = req.body.articleRef;
+        // Save resulting post _id for use in News update query
+        var postId;
+        console.log('post: ' + post + '_userRef: ' + _userRef + 'articleRef: ' + _articleRef);
+        let record = new Posts({
+            post,
+            _userRef,
+            _articleRef,
+        });
+        record.save((err, doc) => {
+            if (err) {
+                console.log('error: ' + err);
+            } else {
+                postId = mongoose.Types.ObjectId(doc._id);
+                //postId = new mongoose.Schema.ObjectId(doc._id);
+                console.log('doc: ' + doc + 'postId: ' + postId + 'success');
+
+                News.findByIdAndUpdate(_articleRef,
+                    { $push: { posts: postId }},
+                    { new: true },  (err, model) => {
+                        if (err) {
+                            console.log('error: ' + err);
+                        } else {
+                            console.log('model: ' + model);
+                        }
+                });
+            }
+        });
+        console.log('postId in find: ' , postId);
+        /*
+        News.findByIdAndUpdate( _articleRef, {
+            $push: {
+                'posts': {
+                    postId,
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true,
+            }, (err, model) => {
+                if (err) return res.send('error: ' + err);
+                return res.send('model: ' + model);
+            }
+        });*/
     },
 
     removeNews: (req, res) => {

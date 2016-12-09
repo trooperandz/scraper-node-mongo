@@ -7,21 +7,45 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-8 col-lg-8">
-            <legend>{{date}}</legend>
-            <h2>{{heading}}</h2>
+            <legend>{{date}} <small><a href="/news/view" class="pull-right">Go Back</a></small></legend>
+
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-8 col-lg-8">
+            <h2>{{heading}}</h2>
             <img id="article-img" src="{{imgUrl}}" alt="{{heading}}" width="100%" height="auto" />
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-4">
+            <h2 class="text-primary">Post a comment </h2>
+            <form id="form-comment" method="POST" action="/news/comment">
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <textarea class="form-control" name="post" id="post" placeholder="Please leave an insightful comment"></textarea>
+                    <input type="hidden" id="articleRef" name="articleRef" value="{{newsId}}" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </div>
+            </form>
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-xs-12 col-md-8 col-lg-8">
             <p>{{description}}</p>
-            <a href="{{articleLink}}" target="_blank">{{articleLink}}</a>
+            <p>Full Article: <a href="{{articleLink}}" target="_blank">{{articleLink}}</a></p>
+            <br>
             <legend></legend>
+            <h3>Comments</h3>
+            {{#each comments}}
+
+            {{/each}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-8 col-lg-8">
+
         </div>  <!-- /.col -->
     </div>  <!-- /.row -->
 </div> <!-- /.container -->

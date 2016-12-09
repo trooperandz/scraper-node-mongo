@@ -28,7 +28,7 @@ const NewsSchema = new Schema({
         required: 'String is required',
     },
 
-    category: {
+    _categoryRef: {
         type: Schema.Types.ObjectId,
         ref: 'Categories',
     },
@@ -39,7 +39,12 @@ const NewsSchema = new Schema({
     },
 
     posts: [{
-        comment: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Posts',
+    }],
+    /*
+    posts: [{
+        type: String,
         postedBy: {
             type: Schema.Types.ObjectId,
             ref: 'Users',
@@ -48,7 +53,7 @@ const NewsSchema = new Schema({
             type: Date,
             default: Date.now,
         },
-    }],
+    }],*/
 });
 
 const News = mongoose.model('News', NewsSchema);

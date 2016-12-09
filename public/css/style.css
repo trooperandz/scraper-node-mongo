@@ -15,3 +15,7 @@ span a:hover {
     color: #ddd;
     text-decoration: none;
 }
+
+#form-comment textarea {
+    height: 250px;
+}
