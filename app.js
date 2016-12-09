@@ -7,9 +7,11 @@ const express = require('express'),
       cookieParser = require('cookie-parser'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
+      Promise = require('bluebird'),
+      session = require('express-session'),
       indexRouter = require('./routes/indexRouter'),
       newsRouter = require('./routes/newsRouter'),
-      Promise = require('bluebird'),
+      usersRouter = require('./routes/usersRouter'),
       app = express();
 
 // Use bluebird for mongoose promise library
@@ -29,6 +31,13 @@ db.once('open', () => {
     console.log('Mongoose connection established!');
 });
 
+app.use(session({
+  secret: '1234567',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -43,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/news', newsRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

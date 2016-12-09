@@ -6,3 +6,12 @@ body {
     float: none;
     margin: 0 auto;
 }
+
+span a {
+    color: #fff;
+}
+
+span a:hover {
+    color: #ddd;
+    text-decoration: none;
+}

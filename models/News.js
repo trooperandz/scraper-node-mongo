@@ -29,7 +29,7 @@ const NewsSchema = new Schema({
     },
 
     category: {
-        type: Schema.types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Categories',
     },
 
@@ -41,14 +41,15 @@ const NewsSchema = new Schema({
     posts: [{
         comment: String,
         postedBy: {
-            type: Schema.types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Users',
+        },
         createdAt: {
             type: Date,
             default: Date.now,
         },
     }],
-})
+});
 
 const News = mongoose.model('News', NewsSchema);
 

@@ -5,6 +5,6 @@ const express = require('express'),
       router = express.Router();
 
 // Load index page
-router.get('/', indexController.loadIndexPage);
+router.get('/', indexController.renderIndexPage);
 
 module.exports = router;

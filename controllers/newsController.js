@@ -10,7 +10,10 @@ function buildList(arr) {
     if(arr.length > 0) {
         let html = `<ul class="list-group">`;
         arr.forEach(obj => {
-            html += `<li class="list-group-item"> ${obj.heading} </li>`;
+            html += `<li class="list-group-item">
+                        <span class="badge"> <a href="">View</a> </span>
+                        ${obj.heading}
+                     </li>`;
         });
         html += `</ul>`;
         return html;
