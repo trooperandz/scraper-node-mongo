@@ -11,7 +11,7 @@ function buildList(arr) {
         let html = `<ul class="list-group">`;
         arr.forEach(obj => {
             html += `<li class="list-group-item">
-                        <span class="badge"> <a href="">View</a> </span>
+                        <span class="badge"> <a href="/news/view/${obj._id}">View</a> </span>
                         ${obj.heading}
                      </li>`;
         });
@@ -45,7 +45,7 @@ module.exports = {
                 $('.article-ct').each((index, item) => {
                     let parent = $(item).children();
                     let imgUrl = parent.children('.m').children('a').children('img').attr('src');
-                    let link = parent.children('h3').children('a').attr('href');
+                    let link = 'http://www.foxnews.com/' + parent.children('h3').children('a').attr('href');
                     let heading = parent.children('h3').children('a').text();
                     let description = $(item).children().children('p').text();
 
@@ -70,15 +70,6 @@ module.exports = {
                             console.log(doc);
                         }
                     });
-                    /*
-                    services.insertNews({
-                        link,
-                        heading,
-                        description,
-                        imgUrl,
-                    }).exec(() => {
-
-                    });*/
                 });
                 console.log(data);
                 res.send('News was added!');
@@ -97,6 +88,20 @@ module.exports = {
                     newsList: buildList(doc) ,
                 });
             }
+        });
+    },
+
+    viewArticle: (req, res) => {
+        News.findOne({ _id: req.params.id }, (err, doc) => {
+            let date = moment(doc.createdAt).format('MM/DD/YYYY');
+            res.render('article', {
+                title: 'Science News',
+                date,
+                heading: doc.heading,
+                imgUrl: doc.imgUrl,
+                description: doc.description,
+                articleLink: doc.link,
+            });
         });
     },
 

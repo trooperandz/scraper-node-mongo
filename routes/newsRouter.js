@@ -6,6 +6,7 @@ const express = require('express'),
 
 router.get('/add', newsController.insertNews);
 router.get('/view', newsController.viewNews);
-router.get('/remove', newsController.removeNews);
+router.get('/view/:id', newsController.viewArticle);
+router.post('/remove', newsController.removeNews);
 
 module.exports = router;
