@@ -18,10 +18,22 @@ function renderLoginPage(req, res, error, userName, password) {
     });
 }
 
+function renderSignUpPage(req, res, errors, firstName, lastName, userName, email, password, successMsg) {
+    return res.render('signup', {
+        errors,
+        firstName,
+        lastName,
+        userName,
+        email,
+        password,
+        successMsg,
+    });
+}
+
 module.exports = {
     // Render the sign up page
-    renderSignupPage: (req, res) => {
-        res.render('signup');
+    loadSignupPage: (req, res) => {
+        renderSignUpPage(req, res);
     },
 
     // Process user login
@@ -90,15 +102,20 @@ module.exports = {
             errorArr.push('You entered an invalid password!');
         }
 
+        if (errorArr.length > 0) {
+            return renderSignUpPage(req, res, errorArr, firstName, lastName, userName, email, password);
+        }
+
         // Encrypt password
         Passwords.encryptPassword({password}).exec({
             error: (err) => {
                 errorArr.push("There was a password encryption error!");
+                return renderSignUpPage(req, res, errorArr, firstName, lastName, userName, email, password);
             },
             success: function(encryptedPassword) {
                 // First, check for errorArr to ensure that invalid data is not inserted into db
                 if(errorArr.length > 0) {
-                    return res.render('signup', { errors: errorArr });
+                    return renderSignUpPage(req, res, errorArr, firstName, lastName, userName, email, password);
                 }
                 // No errors; add new user to db
                 let user = new Users({
@@ -110,9 +127,11 @@ module.exports = {
                 });
                 user.save((err, doc) => {
                     if (err) {
-                        return res.send("Database error!");
+                        return renderSignUpPage(req, res, errorArr, firstName, lastName, userName, email, password);
                     }
-                    return res.render('signup', { successMsg: 'You have signed up successfully! \n An email confirmation has been sent to ' + email });
+                    // Saved to db successfully
+                    let successMsg = 'You have signed up successfully! \n An email confirmation has been sent to: ' + email;
+                    return renderSignUpPage(req, res, errorArr, firstName, lastName, userName, email, password, successMsg);
                 });
             }
         });
