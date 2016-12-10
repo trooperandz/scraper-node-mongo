@@ -5,6 +5,7 @@
             <h3>{{title}}</h3>
         </div>
     </div>
+
     <div class="row">
         <div class="col-xs-12 col-md-8 col-lg-8">
             <legend>{{date}} <small><a href="/news/view" class="pull-right">Go Back</a></small></legend>
@@ -16,6 +17,7 @@
             <h2>{{heading}}</h2>
             <img id="article-img" src="{{imgUrl}}" alt="{{heading}}" width="100%" height="auto" />
         </div>
+
         <div class="col-xs-12 col-md-4 col-lg-4">
             <h2 class="text-primary">Post a comment </h2>
             <form id="form-comment" method="POST" action="/news/comment">
@@ -38,11 +40,25 @@
             <br>
             <legend></legend>
             <h3>Comments</h3>
-            {{#each comments}}
-
-            {{/each}}
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-8 col-lg-6">
+        {{#if posts}}
+          {{#each posts}}
+            <blockquote>
+                <small>Posted {{this.createdAt}} by <cite title="Source Title">{{this._userRef}}</cite></small>
+                <p>{{this.post}}</p>
+            </blockquote>
+            <legend</legend>
+          {{/each}}
+        {{else}}
+            <p> There are no comments for this article. </p>
+        {{/if}}
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xs-12 col-md-8 col-lg-8">
 

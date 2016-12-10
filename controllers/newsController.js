@@ -29,6 +29,13 @@ function getCurrDate() {
     return moment(new Date).format('MM/DD/YYYY');
 }
 
+function formatDate(arr) {
+    arr.forEach(item => {
+        item.createdAt = moment(new Date(item.createdAt)).format('MM/DD/YYYY');
+    });
+    return arr;
+}
+
 module.exports = {
     insertNews: (req, res) => {
         console.log("Grabbing news...");
@@ -94,6 +101,34 @@ module.exports = {
     },
 
     viewArticle: (req, res) => {
+
+        News
+            .findOne({ _id: req.params.id })
+            .populate('posts')
+            .exec(function (err, docs) {
+              if (err) {
+                console.log('error: ' + err);
+              } else {
+                console.log('The docs are %s', docs);
+                let articleDate = moment(docs.createdAt).format('MM/DD/YYYY');
+
+                // Reformat correct date display for each post
+                let posts = formatDate(docs.posts);
+
+                res.render('article', {
+                    title: 'Science News',
+                    date: articleDate,
+                    heading: docs.heading,
+                    imgUrl: docs.imgUrl,
+                    description: docs.description,
+                    articleLink: docs.link,
+                    newsId: docs._id,
+                    posts,
+                });
+              }
+            });
+
+        /*
         News.findOne({ _id: req.params.id }, (err, doc) => {
             let date = moment(doc.createdAt).format('MM/DD/YYYY');
             res.render('article', {
@@ -105,7 +140,7 @@ module.exports = {
                 articleLink: doc.link,
                 newsId: doc._id,
             });
-        });
+        });*/
     },
 
     postComment: (req, res) => {
@@ -129,7 +164,7 @@ module.exports = {
                 console.log('doc: ' + doc + 'postId: ' + postId + 'success');
 
                 News.findByIdAndUpdate(_articleRef,
-                    { $push: { posts: postId }},
+                    { $push: { posts: postId } },
                     { new: true },  (err, model) => {
                         if (err) {
                             console.log('error: ' + err);
@@ -140,21 +175,6 @@ module.exports = {
             }
         });
         console.log('postId in find: ' , postId);
-        /*
-        News.findByIdAndUpdate( _articleRef, {
-            $push: {
-                'posts': {
-                    postId,
-                }
-            }, {
-                safe: true,
-                upsert: true,
-                new: true,
-            }, (err, model) => {
-                if (err) return res.send('error: ' + err);
-                return res.send('model: ' + model);
-            }
-        });*/
     },
 
     removeNews: (req, res) => {
