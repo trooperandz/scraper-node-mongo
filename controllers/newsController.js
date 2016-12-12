@@ -8,6 +8,7 @@ const mongoose = require('mongoose'),
       cheerio = require('cheerio'),
       moment = require('moment');
 
+// Build the news list
 function buildList(arr) {
     if(arr.length > 0) {
         let html = `<ul class="list-group">`;
@@ -25,15 +26,45 @@ function buildList(arr) {
     }
 }
 
+// Get the current date in the correct format
 function getCurrDate() {
     return moment(new Date).format('MM/DD/YYYY');
 }
 
+// Reformat the array with the correct date using moment (could not get the correct way to work)
 function formatDate(arr) {
-    arr.forEach(item => {
-        item.createdAt = moment(new Date(item.createdAt)).format('MM/DD/YYYY');
+    let newArr = [];
+    arr.forEach((item, index) => {
+        let date = moment(new Date(item.createdAt)).format('MM/DD/YYYY');
+        newArr.push({
+            _id: item.id,
+            post: item.post,
+            _userRef: item._userRef,
+            _articleRef: item._articleRef,
+            createdAt: date,
+        });
+        //console.log('item.createdAt: ' + item.createdAt);
+        //console.log('date: ' + moment(new Date(item.createdAt)).format('MM/DD/YYYY'));
+        //item.createdAt = moment(new Date(item.createdAt)).format('MM/DD/YYYY');
     });
-    return arr;
+    //console.log(arr);
+    //return arr;
+    return newArr;
+}
+
+// Build the html structure for each comment
+function buildCommentBlock(commentArr) {
+
+    let html =``;
+    commentArr.forEach(item => {
+      html += `
+        <blockquote>
+            <small>Posted ${item.createdAt} by <cite title="Source Title"> ${item._userRef} </cite></small>
+            <p>${item.post}</p>
+        </blockquote>
+        <legend</legend>`;
+    });
+    return html;
 }
 
 module.exports = {
@@ -101,19 +132,23 @@ module.exports = {
     },
 
     viewArticle: (req, res) => {
-
-        News
-            .findOne({ _id: req.params.id })
-            .populate('posts')
-            .exec(function (err, docs) {
-              if (err) {
+        News.findOne({ _id: req.params.id })
+        .populate('posts')
+        .exec(function (err, docs) {
+                if (err) {
                 console.log('error: ' + err);
-              } else {
+            } else {
                 console.log('The docs are %s', docs);
                 let articleDate = moment(docs.createdAt).format('MM/DD/YYYY');
 
-                // Reformat correct date display for each post
-                let posts = formatDate(docs.posts);
+                // If posts exist, reformat correct date display for each post and build each <blockquote>
+                let commentBlocks;
+                if (docs.posts.length > 0) {
+                    let commentArr = formatDate(docs.posts);
+                    commentBlocks = buildCommentBlock(commentArr);
+                } else {
+                    commentBlocks = false;
+                }
 
                 res.render('article', {
                     title: 'Science News',
@@ -123,33 +158,20 @@ module.exports = {
                     description: docs.description,
                     articleLink: docs.link,
                     newsId: docs._id,
-                    posts,
+                    commentBlocks
                 });
               }
-            });
-
-        /*
-        News.findOne({ _id: req.params.id }, (err, doc) => {
-            let date = moment(doc.createdAt).format('MM/DD/YYYY');
-            res.render('article', {
-                title: 'Science News',
-                date,
-                heading: doc.heading,
-                imgUrl: doc.imgUrl,
-                description: doc.description,
-                articleLink: doc.link,
-                newsId: doc._id,
-            });
-        });*/
+        });
     },
 
     postComment: (req, res) => {
         let post = req.body.post;
         let _userRef = req.session.userId;
         let _articleRef = req.body.articleRef;
+        console.log('server-side: post=' + post + '_userRef=' + _userRef + '_articleRef=' + _articleRef);
         // Save resulting post _id for use in News update query
         var postId;
-        console.log('post: ' + post + '_userRef: ' + _userRef + 'articleRef: ' + _articleRef);
+        //console.log('post: ' + post + '_userRef: ' + _userRef + 'articleRef: ' + _articleRef);
         let record = new Posts({
             post,
             _userRef,
@@ -160,16 +182,25 @@ module.exports = {
                 console.log('error: ' + err);
             } else {
                 postId = mongoose.Types.ObjectId(doc._id);
-                //postId = new mongoose.Schema.ObjectId(doc._id);
                 console.log('doc: ' + doc + 'postId: ' + postId + 'success');
 
                 News.findByIdAndUpdate(_articleRef,
                     { $push: { posts: postId } },
                     { new: true },  (err, model) => {
                         if (err) {
-                            console.log('error: ' + err);
+                            return res.send('error');
                         } else {
-                            console.log('model: ' + model);
+                            console.log('doc: ' + doc);
+                            // Build blockquote and return to ajax call
+                            let html = buildCommentBlock([
+                                {
+                                    post,
+                                    _userRef,
+                                    createdAt: getCurrDate(),
+                                }
+                            ]);
+                            console.log('html: ' + html);
+                            return res.send(html);
                         }
                 });
             }
@@ -182,7 +213,7 @@ module.exports = {
             if (err) {
                 console.log(err);
             } else {
-                res.send('All news was removed!');
+                return res.send('All news was removed!');
             }
         })
     },

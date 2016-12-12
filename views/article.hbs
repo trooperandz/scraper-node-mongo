@@ -45,17 +45,13 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-8 col-lg-6">
-        {{#if posts}}
-          {{#each posts}}
-            <blockquote>
-                <small>Posted {{this.createdAt}} by <cite title="Source Title">{{this._userRef}}</cite></small>
-                <p>{{this.post}}</p>
-            </blockquote>
-            <legend</legend>
-          {{/each}}
-        {{else}}
-            <p> There are no comments for this article. </p>
-        {{/if}}
+            <div id="comment-blocks">
+              {{#if commentBlocks}}
+                {{{commentBlocks}}}
+              {{else}}
+                <p> There are no comments for this article. </p>
+              {{/if}}
+            </div> <!-- /.comment-blocks -->
         </div>
     </div>
 
