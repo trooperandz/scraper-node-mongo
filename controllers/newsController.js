@@ -37,7 +37,7 @@ function formatDate(arr) {
     arr.forEach((item, index) => {
         let date = moment(new Date(item.createdAt)).format('MM/DD/YYYY');
         newArr.push({
-            _id: item.id,
+            _id: item._id,
             post: item.post,
             _userRef: item._userRef,
             _articleRef: item._articleRef,
@@ -61,8 +61,9 @@ function buildCommentBlock(commentArr) {
         <blockquote>
             <small>Posted ${item.createdAt} by <cite title="Source Title"> ${item._userRef} </cite></small>
             <p>${item.post}</p>
+            <a href="#" data-id="${item._id}">Remove Post</a>
         </blockquote>
-        <legend</legend>`;
+        <legend></legend>`;
     });
     return html;
 }
@@ -206,6 +207,17 @@ module.exports = {
             }
         });
         console.log('postId in find: ' , postId);
+    },
+
+    removeComment: (req, res) => {
+        let _id = req.body.postId;
+        Posts.remove({ _id }, (err, doc) => {
+            if (err) {
+                return res.send('error');
+            } else {
+                return res.send('success');
+            }
+        });
     },
 
     removeNews: (req, res) => {

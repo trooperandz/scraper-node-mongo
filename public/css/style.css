@@ -16,6 +16,11 @@ span a:hover {
     text-decoration: none;
 }
 
+blockquote a {
+    text-decoration: none;
+    font-size: 13px;
+}
+
 #form-comment textarea {
     height: 250px;
 }

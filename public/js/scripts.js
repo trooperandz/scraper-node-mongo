@@ -3,18 +3,11 @@
 const timeDelayShort = 1200;
 
 $(document).ready(() => {
+
+    // User comments post click handler
     $('#form-comment button').on('click', (e) => {
         e.preventDefault();
-        /*
-        $('textarea').notify(
-            'test msg',
-            'success',
-            {
-                position: 'top right',
-                autoHideDelay: 5000
-            }
-        );
-        return false;*/
+
         // Get article id and post for comment storage
         let post = document.getElementById('post').value;
         let articleRef = document.getElementById('articleRef').value;
@@ -54,6 +47,43 @@ $(document).ready(() => {
         });
     });
 
+    // Delete comment click handler
+    $('blockquote').on('click', 'a', (e) => {
+        e.preventDefault();
+
+        let postId = $(this).attr('id');
+        //console.log('$this: ' , $(this));
+        console.log('e.target: ' + e.target);
+        console.log('postId: ' + postId);
+
+        if (!postId) {
+            showAlertModal('There was an error processing your request!');
+            return false;
+        }
+
+        // Confirm delete
+        //if (processConfirmModal)
+
+        let formData = 'postId=' + postId;
+
+        initializeSpinner();
+
+        $.ajax({
+            type: 'POST',
+            url: '/news/removeComment',
+            data: formData,
+        }).done((response) => {
+            setTimeout(() => {
+                removeSpinner();
+                if (response == 'success') {
+                    // Remove the <blockquote>
+                    $(this).parent().remove();
+                    // Show success message
+                }
+            }, timeDelayShort);
+        });
+    });
+
     // Show form errors if any occurred
     function checkErrors(errorArr, notify) {
         if (errorArr.length > 0) {
@@ -83,6 +113,28 @@ $(document).ready(() => {
                 autoHideDelay: 5000
             }
         );
+    }
+
+    function showConfirmModal(msg) {
+        // Fill in values
+        $('#confirm-modal-msg').text(msg);
+        // Show the modal
+        $('#confirm-modal').modal('show');
+    }
+
+    // Attach confirm modal click handler ONLY ONCE (.one) for every confirmation process
+    function processConfirmModal() {
+        $('#confirm-modal button').one('click', (e) => {
+            // Get type of button clicked
+            let buttonType = $(this).data('type');
+            if (buttonType == 'cancel') {
+                $('#confirm-modal').modal('hide');
+                return false;
+            } else {
+                $('#confirm-modal').modal('hide');
+                return true;
+            }
+        });
     }
 
     function showAlertModal(msg) {
