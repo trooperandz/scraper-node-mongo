@@ -58,12 +58,14 @@ function buildCommentBlock(commentArr) {
     let html =``;
     commentArr.forEach(item => {
       html += `
-        <blockquote>
-            <small>Posted ${item.createdAt} by <cite title="Source Title"> ${item._userRef} </cite></small>
-            <p>${item.post}</p>
-            <a href="#" data-id="${item._id}">Remove Post</a>
-        </blockquote>
-        <legend></legend>`;
+        <div id="comment">
+            <blockquote>
+                <small>Posted ${item.createdAt} by <cite title="Source Title"> ${item._userRef} </cite></small>
+                <p>${item.post}</p>
+                <a href="#" id="test-id" data-id="${item._id}">Remove Post</a>
+            </blockquote>
+            <legend></legend>
+        </div>`;
     });
     return html;
 }
@@ -189,7 +191,7 @@ module.exports = {
                     { $push: { posts: postId } },
                     { new: true },  (err, model) => {
                         if (err) {
-                            return res.send('error');
+                            res.send('error');
                         } else {
                             console.log('doc: ' + doc);
                             // Build blockquote and return to ajax call
@@ -201,21 +203,20 @@ module.exports = {
                                 }
                             ]);
                             console.log('html: ' + html);
-                            return res.send(html);
+                            res.send(html);
                         }
                 });
             }
         });
-        console.log('postId in find: ' , postId);
     },
 
     removeComment: (req, res) => {
         let _id = req.body.postId;
         Posts.remove({ _id }, (err, doc) => {
             if (err) {
-                return res.send('error');
+                res.send('error');
             } else {
-                return res.send('success');
+                res.send('success');
             }
         });
     },

@@ -2,7 +2,7 @@
 
 const timeDelayShort = 1200;
 
-$(document).ready(() => {
+$(document).ready(function() {
 
     // User comments post click handler
     $('#form-comment button').on('click', (e) => {
@@ -39,7 +39,7 @@ $(document).ready(() => {
                     // Append new <blockquote> to #comment-blocks div
                     $('#comment-blocks').append(html);
                     // Empty out the <textarea> text
-                    $('#articleRef').val('');
+                    $('textarea').val('');
                     // Show success notification
                     notify('textarea', 'Your comment was added!', 'success', 'top right');
                 }
@@ -48,13 +48,10 @@ $(document).ready(() => {
     });
 
     // Delete comment click handler
-    $('blockquote').on('click', 'a', (e) => {
+    $('#comment-blocks').on('click', '#comment blockquote a', function(e) {
         e.preventDefault();
 
-        let postId = $(this).attr('id');
-        //console.log('$this: ' , $(this));
-        console.log('e.target: ' + e.target);
-        console.log('postId: ' + postId);
+        let postId = $(this).data('id');
 
         if (!postId) {
             showAlertModal('There was an error processing your request!');
@@ -76,9 +73,10 @@ $(document).ready(() => {
             setTimeout(() => {
                 removeSpinner();
                 if (response == 'success') {
-                    // Remove the <blockquote>
-                    $(this).parent().remove();
+                    // Remove the <blockquote> and the <label>
+                    $(this).parent().parent().remove();
                     // Show success message
+                    notify('blockquote', 'Comment removed successfully!', 'success', 'top left');
                 }
             }, timeDelayShort);
         });
@@ -123,6 +121,7 @@ $(document).ready(() => {
     }
 
     // Attach confirm modal click handler ONLY ONCE (.one) for every confirmation process
+    /*
     function processConfirmModal() {
         $('#confirm-modal button').one('click', (e) => {
             // Get type of button clicked
@@ -135,7 +134,7 @@ $(document).ready(() => {
                 return true;
             }
         });
-    }
+    }*/
 
     function showAlertModal(msg) {
         // Fill in values
