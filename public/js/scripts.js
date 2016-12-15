@@ -85,6 +85,42 @@ $(document).ready(function() {
         });
     });
 
+    // TODO: preventDefault() is not working correctly.  Find out why.
+    $('.news-content-link').on('click', 'a', (e) => {
+        e.preventDefault();
+        //e.stopImmediatePropagation();
+
+        // Get name to determine route action.  Matches the routes.
+        let route = $(this).data('route');
+        let url = '/news/' + route;
+        let msg = '';
+
+        // Set alert message based on route
+        if (route == 'add') {
+            msg = 'News was added successfully!';
+        } else {
+            msg = 'News was removed successfully!';
+        }
+
+        initializeSpinner();
+
+        $.ajax({
+            type: 'POST',
+            url,
+        }).done((response) => {
+            setTimeout(() => {
+                removeSpinner();
+                if (response == 'success') {
+                    // Fill in and show alert modal
+                    showAlertModal(msg);
+                } else {
+                    showAlertModal('There was an error processing your request!');
+                }
+            }, timeDelayShort);
+        });
+        return false;
+    });
+
     // Show form errors if any occurred
     function checkErrors(errorArr, notify) {
         if (errorArr.length > 0) {

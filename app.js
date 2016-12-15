@@ -13,6 +13,7 @@ const express = require('express'),
       indexRouter = require('./routes/indexRouter'),
       newsRouter = require('./routes/newsRouter'),
       usersRouter = require('./routes/usersRouter'),
+      adminRouter = require('./routes/adminRouter'),
       app = express();
 
 // Use bluebird for mongoose promise library
@@ -55,6 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/news', newsRouter);
 app.use('/users', usersRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

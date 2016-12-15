@@ -115,7 +115,7 @@ module.exports = {
                     });
                 });
                 console.log(data);
-                res.send('News was added!');
+                return res.send('success');
             }
         });
     },
@@ -234,7 +234,7 @@ module.exports = {
             if (err) {
                 console.log(err);
             } else {
-                return res.send('All news was removed!');
+                return res.send('success');
             }
         })
     },
