@@ -4,6 +4,6 @@ const services = require('../services');
 
 module.exports = {
     renderAdminPage: (req, res) => {
-        res.render('admin');
+        res.render('admin', { userName: req.session.userName });
     },
 }
