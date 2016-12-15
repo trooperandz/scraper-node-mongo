@@ -121,16 +121,16 @@ module.exports = {
     },
 
     viewNews: (req, res) => {
-        let userId = req.session.userId;
         News.find((err, doc) => {
             if(err) {
                 res.send('Error: ' , err);
             } else {
-                console.log('userName: ' + userId);
+                console.log('userName: ' + req.session.userName);
                 res.locals = {
                     //userName: req.session.userName
                 }
                 res.render('science-news', {
+                    userName: req.session.userName,
                     title: 'Science News',
                     date: getCurrDate(),
                     newsList: buildList(doc) ,

@@ -3,6 +3,8 @@
 const timeDelayShort = 1200;
 
 $(document).ready(function() {
+    // Initialize dropdowns
+    $('.dropdown-toggle').dropdown();
 
     // User comments post click handler
     $('#form-comment button').on('click', (e) => {

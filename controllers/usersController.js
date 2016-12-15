@@ -3,6 +3,7 @@
 // Load Modules
 const Users = require('../models/Users'),
       Passwords = require('machinepack-passwords'),
+      moment = require('moment'),
       services = require('../services');
 
 // Set globals
@@ -42,7 +43,7 @@ module.exports = {
         let password = req.body.password;
 
         // Find user
-        Users.find({ 'userName': userName }, 'password', (err, user) => {
+        Users.find({ 'userName': userName }, (err, user) => {
             if (err) {
                 return res.send('Query error occurred!');
             } else {
@@ -68,13 +69,41 @@ module.exports = {
                             // Password verified
                             req.session.authenticated = true;
                             req.session.userId = user[0]._id;
+                            req.session.firstName = user[0].firstName,
+                            req.session.lastName = user[0].lastName,
                             req.session.userName = user[0].userName;
                             req.session.userEmail = user[0].email;
+                            req.session.createdAt = user[0].createdAt;
+                            console.log('session data: userId: ' + req.session.userId + 'userName: ' + req.session.userName);
+                            console.log('user login data obj: ', user);
                             res.redirect('/news/view');
                         }
                     });
                 }
             }
+        });
+    },
+
+    // Log out current user
+    logoutUser: (req, res) => {
+        // Remove session data
+        req.session.destroy((err) => {
+            if (err) {
+                res.send('error: ' + err);
+            } else {
+                res.redirect('/');
+            }
+        });
+    },
+
+    // Show user's profile info
+    renderProfile: (req, res) => {
+        res.render('profile', {
+            firstName: req.session.firstName,
+            lastName: req.session.lastName,
+            userName: req.session.userName,
+            userEmail: req.session.userEmail,
+            createdAt: moment(new Date(req.session.createdAt)).format('MM/DD/YYYY'),
         });
     },
 
