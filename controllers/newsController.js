@@ -121,10 +121,15 @@ module.exports = {
     },
 
     viewNews: (req, res) => {
+        let userId = req.session.userId;
         News.find((err, doc) => {
             if(err) {
                 res.send('Error: ' , err);
             } else {
+                console.log('userName: ' + userId);
+                res.locals = {
+                    //userName: req.session.userName
+                }
                 res.render('science-news', {
                     title: 'Science News',
                     date: getCurrDate(),
@@ -135,6 +140,7 @@ module.exports = {
     },
 
     viewArticle: (req, res) => {
+        console.log('userName: ' + req.session.userName);
         News.findOne({ _id: req.params.id })
         .populate('posts')
         .exec(function (err, docs) {
@@ -198,6 +204,7 @@ module.exports = {
                             let html = buildCommentBlock([
                                 {
                                     post,
+                                    _id: postId,
                                     _userRef,
                                     createdAt: getCurrDate(),
                                 }

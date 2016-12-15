@@ -48,10 +48,11 @@ $(document).ready(function() {
     });
 
     // Delete comment click handler
-    $('#comment-blocks').on('click', '#comment blockquote a', function(e) {
+    $('#comment-blocks').on('click', 'blockquote a', function(e) {
         e.preventDefault();
 
         let postId = $(this).data('id');
+        console.log('postId: ' + postId);
 
         if (!postId) {
             showAlertModal('There was an error processing your request!');

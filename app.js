@@ -9,6 +9,7 @@ const express = require('express'),
       mongoose = require('mongoose'),
       Promise = require('bluebird'),
       session = require('express-session'),
+      hbs = require('hbs'),
       indexRouter = require('./routes/indexRouter'),
       newsRouter = require('./routes/newsRouter'),
       usersRouter = require('./routes/usersRouter'),
@@ -39,6 +40,7 @@ app.use(session({
 }));
 
 // view engine setup
+hbs.registerPartials(path.join(__dirname, '/views/partials'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 

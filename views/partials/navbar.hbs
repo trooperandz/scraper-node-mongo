@@ -1,0 +1,27 @@
+<!-- Main program top navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"  aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">ScrapeInator</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/news/view">Science News</a></li>
+                <li><a href="/news/add">Add News</a></li>
+                <li><a href="/news/remove">Clear News</a></li>
+                <li><a href="/users">Sign Up</a></li>
+                <li><a href="/admin">Admin</a></li>
+              {{#if userName}}
+                <li><a href="">Hi, {{userName}}</a></li>
+              {{/if}}
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div> <!-- /.container -->
+</nav> <!-- /.navbar -->
