@@ -1,5 +1,13 @@
+html {
+    /* Taken from bootstrap sticky footer example */
+    position: relative;
+    min-height: 100%;
+}
+
 body {
-  padding-top: 50px;
+    padding-top: 50px;
+    /* Set the bottom margin to equal the footer height */
+    margin-bottom: 50px;
 }
 
 .col-centered {
@@ -23,4 +31,20 @@ blockquote a {
 
 #form-comment textarea {
     height: 250px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here, must equal margin-bottom of body */
+    height: 50px;
+    /* Set to match the main theme */
+    background-color: #222222;
+    border-color: #121212;
+    color: #fff;
+}
+
+.footer p {
+    margin: 14.5px 0;
 }

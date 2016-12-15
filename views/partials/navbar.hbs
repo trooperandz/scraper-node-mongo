@@ -16,11 +16,11 @@
                 <li><a href="/news/view">Science News</a></li>
                 <li><a href="/news/add">Add News</a></li>
                 <li><a href="/news/remove">Clear News</a></li>
-                <li><a href="/users">Sign Up</a></li>
               {{#if userName}}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" style="color: #2780e3;" data-toggle="dropdown" role="button" aria-expanded="false">
-                        Hi, {{userName}}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> &nbsp;
+                        {{userName}}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
@@ -31,6 +31,8 @@
                         <li><a href="/users/logout">Logout</a></li>
                     </ul>
                 </li>
+              {{else}}
+                <li><a href="/users">Sign Up</a></li>
               {{/if}}
             </ul>
         </div><!--/.nav-collapse -->

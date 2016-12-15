@@ -160,6 +160,7 @@ module.exports = {
                 }
 
                 res.render('article', {
+                    userName: req.session.userName,
                     title: 'Science News',
                     date: articleDate,
                     heading: docs.heading,
