@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12">
             <br>
-            <h3>{{title}}  {{date}}</h3>
+            <h3>{{title}} <small class="pull-right">Results: {{newsCount}}</small></h3>
         </div>
     </div>
     <div class="row">
@@ -11,6 +11,7 @@
             {{{newsList}}}
          {{else}}
             <p>There is no news available!</p>
+            <legend></legend>
          {{/if}}
         </div>  <!-- /.col -->
     </div>  <!-- /.row -->

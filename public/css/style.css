@@ -24,6 +24,19 @@ span a:hover {
     text-decoration: none;
 }
 
+ul #user-dropdown {
+    padding: 0;
+}
+
+#user-dropdown .divider {
+    margin: 0;
+}
+
+#user-dropdown a {
+    padding: 20px;
+    font-size: 18px;
+}
+
 blockquote a {
     text-decoration: none;
     font-size: 13px;

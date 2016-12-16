@@ -13,8 +13,10 @@ function buildList(arr) {
     if(arr.length > 0) {
         let html = `<ul class="list-group">`;
         arr.forEach(obj => {
+            let articleDate = moment(obj.articleDate).format('MM/DD/YYYY');
             html += `<li class="list-group-item">
                         <span class="badge"> <a href="/news/view/${obj._id}">View</a> </span>
+                        <span class="text-muted">${articleDate}</span> &nbsp; | &nbsp;
                         ${obj.heading}
                      </li>`;
         });
@@ -89,23 +91,29 @@ module.exports = {
                     let parent = $(item).children();
                     let imgUrl = parent.children('.m').children('a').children('img').attr('src');
                     let link = 'http://www.foxnews.com/' + parent.children('h3').children('a').attr('href');
+                    let articleDate = link.substring(32,42);
                     let heading = parent.children('h3').children('a').text();
                     let description = $(item).children().children('p').text();
 
-                    console.log('text: ' + heading);
+                    // Push each information packet into the data array
                     data.push({
-                        link,
-                        heading,
-                        description,
-                        imgUrl,
-                    });
-                    let record = new News({
                         heading,
                         link,
+                        articleDate,
                         description,
                         imgUrl,
                     });
 
+                    // Create a new record (document)
+                    let record = new News({
+                        heading,
+                        link,
+                        articleDate,
+                        description,
+                        imgUrl,
+                    });
+
+                    // Save the record into the collection
                     record.save((err, doc) => {
                         if (err) {
                             console.log(err);
@@ -121,19 +129,17 @@ module.exports = {
     },
 
     viewNews: (req, res) => {
-        News.find((err, doc) => {
+        News.find({}).sort({articleDate: -1}).exec((err, doc) => {
             if(err) {
                 res.send('Error: ' , err);
             } else {
                 console.log('userName: ' + req.session.userName);
-                res.locals = {
-                    //userName: req.session.userName
-                }
                 res.render('science-news', {
                     userName: req.session.userName,
                     title: 'Science News',
                     date: getCurrDate(),
-                    newsList: buildList(doc) ,
+                    newsList: buildList(doc),
+                    newsCount: doc.length,
                 });
             }
         });
@@ -148,7 +154,7 @@ module.exports = {
                 console.log('error: ' + err);
             } else {
                 console.log('The docs are %s', docs);
-                let articleDate = moment(docs.createdAt).format('MM/DD/YYYY');
+                let articleDate = moment(docs.articleDate).format('MM/DD/YYYY');
 
                 // If posts exist, reformat correct date display for each post and build each <blockquote>
                 let commentBlocks;
@@ -162,7 +168,7 @@ module.exports = {
                 res.render('article', {
                     userName: req.session.userName,
                     title: 'Science News',
-                    date: articleDate,
+                    articleDate,
                     heading: docs.heading,
                     imgUrl: docs.imgUrl,
                     description: docs.description,
