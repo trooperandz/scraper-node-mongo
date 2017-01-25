@@ -4,31 +4,25 @@
             <br>
             <h3 class="text-center">Welcome To ScrapeInator, Where News Is Scraped Daily</h3>
             <br>
-            <br>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-md-6 col-lg-5 col-centered">
-            <form class="form-horizontal" id="login-form" method="POST" action="/users/login">
+        <div class="col-xs-12 col-md-6 col-lg-6 col-centered">
+            <form id="login-form" method="POST" action="/users/login">
                 <legend>Log In</legend>
                 {{#if error}}
                     <p class="text-danger">{{error}}</p>
                 {{/if}}
-                <br>
-                <div class="form-group row">
-                    <label for="userName" class="col-xs-2 control-label">Username</label>
-                    <div class="col-xs-10">
-                        <input type="text" class="form-control" name="userName" id="userName" value="{{userName}}" />
-                    </div>
+
+                <div class="form-group">
+                    <label for="userName">Username</label>
+                    <input type="text" class="form-control" name="userName" id="userName" value="{{userName}}" />
                 </div>
 
-                <div class="form-group row">
-                    <label for="password" class="col-xs-2 control-label">Password</label>
-                    <div class="col-xs-10">
-                        <input type="password" class="form-control" name="password" id="password" value="{{password}}" />
-                    </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" value="{{password}}" />
                 </div>
-                <br>
                 <button type="submit" class="btn btn-success"> Log In </button>
             </form>
         </div>  <!-- /.col -->

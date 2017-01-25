@@ -37,6 +37,10 @@ ul #user-dropdown {
     font-size: 18px;
 }
 
+#login-form .btn {
+    margin-top: 8px;
+}
+
 blockquote a {
     text-decoration: none;
     font-size: 13px;
