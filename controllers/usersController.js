@@ -34,6 +34,7 @@ function renderSignUpPage(req, res, errors, firstName, lastName, userName, email
 module.exports = {
     // Render the sign up page
     loadSignupPage: (req, res) => {
+        req.session.hasAppLoaded = true;
         renderSignUpPage(req, res);
     },
 

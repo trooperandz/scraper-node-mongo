@@ -129,6 +129,8 @@ module.exports = {
     },
 
     viewNews: (req, res) => {
+        req.session.hasAppLoaded = true;
+
         News.find({}).sort({articleDate: -1}).exec((err, doc) => {
             if(err) {
                 res.send('Error: ' , err);
