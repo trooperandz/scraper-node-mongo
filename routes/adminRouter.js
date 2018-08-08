@@ -1,10 +1,10 @@
 'use_strict';
 
-const express = require('express');
-const { renderAdminPage } = require('../controllers/adminController');
-const router = express.Router();
+const express = require('express'),
+      adminController = require('../controllers/adminController'),
+      router = express.Router();
 
 // Load index page
-router.get('/', renderAdminPage);
+router.get('/', adminController.renderAdminPage);
 
 module.exports = router;

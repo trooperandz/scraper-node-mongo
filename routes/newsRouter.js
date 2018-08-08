@@ -1,22 +1,14 @@
 'use strict';
 
-const express = require('express');
-const router = express.Router();
+const express = require('express'),
+      newsController = require('../controllers/newsController'),
+      router = express.Router();
 
-const {
-  insertNews,
-  viewNews,
-  viewArticle,
-  postComment,
-  removeComment,
-  removeNews,
-} = require('../controllers/newsController');
-
-router.get('/add', insertNews);
-router.get('/view', viewNews);
-router.get('/view/:id', viewArticle);
-router.post('/comment', postComment);
-router.post('/removeComment', removeComment);
-router.get('/remove', removeNews);
+router.get('/add', newsController.insertNews);
+router.get('/view', newsController.viewNews);
+router.get('/view/:id', newsController.viewArticle);
+router.post('/comment', newsController.postComment);
+router.post('/removeComment', newsController.removeComment);
+router.get('/remove', newsController.removeNews);
 
 module.exports = router;
