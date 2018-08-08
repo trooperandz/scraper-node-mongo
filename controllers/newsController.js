@@ -1,12 +1,13 @@
 'use strict';
 
-const mongoose = require('mongoose'),
-      News = require('../models/News'),
-      Posts = require('../models/Posts'),
-      services = require('../services'),
-      request = require('request'),
-      cheerio = require('cheerio'),
-      moment = require('moment');
+const mongoose = require('mongoose');
+const request = require('request');
+const cheerio = require('cheerio');
+const moment = require('moment');
+
+const News = require('../models/News');
+const Posts = require('../models/Posts');
+const services = require('../services');
 
 // Build the news list
 function buildList(arr) {
@@ -129,6 +130,8 @@ module.exports = {
     },
 
     viewNews: (req, res) => {
+        req.session.hasAppLoaded = true;
+
         News.find({}).sort({articleDate: -1}).exec((err, doc) => {
             if(err) {
                 res.send('Error: ' , err);

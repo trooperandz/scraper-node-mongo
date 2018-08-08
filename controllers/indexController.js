@@ -4,6 +4,8 @@ const services = require('../services');
 
 module.exports = {
     renderIndexPage: (req, res) => {
-        res.render('index');
+        if (!req.session.hasAppLoaded) return res.redirect('/news/view');
+
+        return res.render('index');
     },
 }

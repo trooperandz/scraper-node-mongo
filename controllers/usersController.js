@@ -1,15 +1,16 @@
 'use strict';
 
 // Load Modules
-const Users = require('../models/Users'),
-      Passwords = require('machinepack-passwords'),
-      moment = require('moment'),
-      services = require('../services');
+const Passwords = require('machinepack-passwords');
+const moment = require('moment');
+
+const Users = require('../models/Users');
+const services = require('../services');
 
 // Set globals
-const validEmail = /(^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$)|(^N\/A$)/,
-      validPass = /^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,}$/,
-      loginFailMsg = 'Your username or password is incorrect!';
+const validEmail = /(^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$)|(^N\/A$)/;
+const validPass = /^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,}$/;
+const loginFailMsg = 'Your username or password is incorrect!';
 
 function renderLoginPage(req, res, error, userName, password) {
     return res.render('index', {
@@ -34,6 +35,7 @@ function renderSignUpPage(req, res, errors, firstName, lastName, userName, email
 module.exports = {
     // Render the sign up page
     loadSignupPage: (req, res) => {
+        req.session.hasAppLoaded = true;
         renderSignUpPage(req, res);
     },
 

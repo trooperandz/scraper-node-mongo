@@ -1,13 +1,20 @@
 'use strict';
 
-const express = require('express'),
-      usersController = require('../controllers/usersController'),
-      router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-router.get('/', usersController.loadSignupPage);
-router.post('/add', usersController.insertUser);
-router.get('/profile', usersController.renderProfile);
-router.post('/login', usersController.loginUser);
-router.get('/logout', usersController.logoutUser);
+const {
+  loadSignupPage,
+  insertUser,
+  renderProfile,
+  loginUser,
+  logoutUser,
+} = require('../controllers/usersController'),
+
+router.get('/', loadSignupPage);
+router.post('/add', insertUser);
+router.get('/profile', renderProfile);
+router.post('/login', loginUser);
+router.get('/logout', logoutUser);
 
 module.exports = router;
